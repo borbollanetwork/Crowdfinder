@@ -23,9 +23,9 @@ $srv = @(Get-ADComputer -Server $dc -Filter 'operatingsystem -like "*Windows*" -
 $hosts = @(if ( $null -like $srv) { echo "No Hosts" } else { $srv >> output.txt | out-null })
 Remove-Variable srv, hosts
 }
-type output.txt | sort -unique | out-file output.txt
-Get-Content output.txt | foreach { $_.Trim()} | Set-Content hosts.txt
-del output.txt ; del output.txt
+type output.txt | sort -unique | out-file output2.txt
+Get-Content output2.txt | foreach { $_.Trim()} | Set-Content hosts.txt
+del output.txt ; del output2.txt
 echo "-------------------------------Running----------------------------------------------"
 foreach($pc in Get-Content .\hosts.txt) {
 $process = @(Get-Process -Computername $pc -Name "*CS*" 2>$null)
