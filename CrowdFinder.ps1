@@ -17,6 +17,7 @@ echo ""
 echo "Add server list in dcs.txt and then"
 pause
 cls
+#Searching for active windows machines registered in the domain.
 echo "----------------------------Searching Hosts--------------------------------------------"
 foreach($dc in Get-Content .\dcs.txt) {
 $srv = @(Get-ADComputer -Server $dc -Filter 'operatingsystem -like "*Windows*" -and enabled -eq "True"' | Select-Object DNSHostName | findstr ".$domain" 2>$null)
@@ -26,6 +27,8 @@ Remove-Variable srv, hosts
 type output.txt | sort -unique | out-file output2.txt
 Get-Content output2.txt | foreach { $_.Trim()} | Set-Content hosts.txt
 del output.txt ; del output2.txt
+cls
+#If the network user has privileges for access from other machines, this script will work perfectly.
 echo "-------------------------------Running----------------------------------------------"
 foreach($pc in Get-Content .\hosts.txt) {
 $process = @(Get-Process -Computername $pc -Name "*CS*" 2>$null)
